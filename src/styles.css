@@ -1,133 +1,544 @@
-/* styles.css */
 body {
   font-family: Arial, sans-serif;
-  background-color: orangered;
+  background-color: #333;
 }
 
-.todo-list {
-  width: 50%;
-  margin: 40px auto;
+body > header {
+  background-color: #333;
+}
+
+.main-container {
+  display: grid;
+  grid-template-columns: 1fr 3fr; 
+  grid-gap: 20px; 
   padding: 20px;
+}
+
+.projects, .todos {
   background-color: #fff;
+  padding: 20px;
   border: 1px solid #ddd;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.todo-list h2 {
+.projects {
+  height: 90vh; 
+  overflow-y: auto; 
+  background-color: powderblue;
+}
+
+.todos {
+ background-color: lavender;
+}
+
+.todo-checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.todo-description-container {
+  margin-top: 10px;
+}
+
+.todo-actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.due-date {
+  margin-right: 20px;
+}
+
+.projects h2, .todos h2 {
   margin-top: 0;
 }
 
-.todo-list ul {
+#project-name-input {
+  width: 300px;
+  height: 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+  display: inline-block;
+  vertical-align: middle;
+  padding-top: -25px;
+}
+
+
+input[type="checkbox"]:checked {
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="[http://www.w3.org/2000/svg"](http://www.w3.org/2000/svg") width="100%" height="100%"><polyline points="20,6 9,17 4,12" style="fill:none;stroke:%23fff;stroke-width: 2"/></svg>');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+input[type="checkbox"]:checked + label {
+  text-decoration: line-through;
+}
+
+header {
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+header h1 {
+  margin: 0;
+}
+
+.project-list, .todo-list ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.todo-list li {
+.project-list li, .todo-list li {
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #ddd;
 }
 
-.todo-list li:last-child {
+.project-list li:last-child, .todo-list li:last-child {
   border-bottom: none;
 }
 
-.todo-list li:hover {
-  background-color: #f5f5f5;
+.project-list li:hover, .todo-list li:hover {
+  background-color: #f0f0f0;
 }
 
-.todo-list .todo-title {
-  font-weight: bold;
+#project-list > li {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
 }
 
-.todo-list .todo-description {
-  font-size: 14px;
-  color: #666;
+#project-list > li > label {
+  grid-column: 1;
+  font-size: 25px;
+  margin-top: 15px;
 }
 
-.todo-list .todo-due-date {
-  font-size: 12px;
-  color: #999;
+#project-list > li > .subcontainer {
+  grid-column: 2;
+  justify-self: end;
 }
 
-.todo-list .todo-priority {
-  font-size: 12px;
-  color: #999;
+#todo-list > li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.todo-form {
-  width: 50%;
-  margin: 40px auto;
+#todo-list > li > input[type="checkbox"] {
+  display: inline-block;
+  margin-right: 10px;
+}
+
+#todo-list > li > div > label {
+  font-size: 16px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#todo-list > li > .subcontainer {
+  margin-left: 10px; /* add some space between the label and buttons */
+}
+
+#todo-list > li > div.content {
+  flex-grow: 1;
+}
+
+#todo-list > li > div.subcontainer {
+  margin-left: auto;
+}
+
+form {
   padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.todo-form label {
+label {
   display: block;
   margin-bottom: 10px;
 }
 
-.todo-form input[type="text"], .todo-form input[type="date"], .todo-form select {
+input[type="text"], input[type="number"] {
   width: 100%;
   height: 40px;
   margin-bottom: 20px;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
 }
 
-.todo-form input[type="submit"] {
-  width: 100%;
-  height: 40px;
-  background-color: #4CAF50;
-  color: #fff;
-  padding: 10px;
+input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+input[type="submit"], button[type="submit"] {
+  padding: 10px 20px;
+  font-size: 18px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.todo-form input[type="submit"]:hover {
+input[type="submit"] {
+  background-color: #4CAF50;
+  color: #fff;
+}
+
+button[type="submit"] {
+  background-color: #333;
+  color: #fff;
+}
+
+button[type="submit"]:hover {
+  background-color: #444;
+}
+
+.delete {
+  color: red;
+  font-size: 50px;
+}
+
+#todo-modal {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 450px;
+  height: 450px;
+  overflow-y: auto;
+}
+
+.close-btn {
+  background-color: #FF3B3F; 
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.close-btn:hover {
+  background-color: #FF6B6B; 
+}
+
+.submit-btn {
+  background-color: #34C759; 
+  color: #fff;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button-container .close-btn {
+  order: 1; 
+}
+
+.button-container .submit-btn {
+  order: 2; 
+}
+
+.button-container button[type="submit"] {
+  background-color: #34C759; 
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-container button[type="submit"]:hover {
+  background-color: #3e8e41; 
+}
+
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#todo-form {
+  margin-top: 20px;
+}
+
+#todo-form input[type="submit"] {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+}
+
+#todo-form input[type="submit"]:hover {
   background-color: #3e8e41;
 }
 
-.project-list {
-  width: 50%;
-  margin: 40px auto;
-  padding: 20px;
-  background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+#todo-modal.show {
+  display: block;
 }
 
-.project-list h2 {
-  margin-top: 0;
+#todo-modal .button-container input[type="submit"] {
+  background-color: #34C759; 
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
-.project-list ul {
-  list-style: none;
-  padding: 0;
+#todo-modal .button-container .close-btn {
+  background-color: #FF3B3F; 
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.button-container .close-btn, .button-container .submit-btn {
+  height: 40px;
   margin: 0;
+  padding: 10px 20px;
 }
 
-.project-list li {
+textarea {
+  width: 90%;
+  height: 100px;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-.project-list li:last-child {
-  border-bottom: none;
+select {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-.project-list li:hover {
-  background-color: #f5f5f5;
+input[type="date"] {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
 }
 
-.project-list .project-name {
-  font-weight: bold;
+#priority {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#due-date {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#description {
+  width: 90%;
+  height: 100px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#title {
+  width: 90%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#todo-modal .modal-container form input[type="text"], 
+#todo-modal .modal-container form textarea, 
+#todo-modal .modal-container form input[type="date"], 
+#todo-modal .modal-container form select {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+#todo-modal .modal-container form textarea {
+  height: 100px;
+}
+
+#todo-modal .modal-container form select {
+  height: 40px;
+}
+
+#todo-modal .modal-container form input[type="submit"] {
+  padding: 10px 20px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: #fff;
+  cursor: pointer;
+}
+
+#todo-modal .modal-container form input[type="submit"]:hover {
+  background-color: #3e8e41;
+}
+
+#todo-modal .modal-container form input[type="submit"]:focus {
+  outline: none;
+  box-shadow: 0 0 5px #4CAF50;
+}
+
+#todo-modal .modal-container form input[type="submit"]:active {
+  transform: translateY(2px);
+}
+
+#todo-modal .modal-container form .error-message {
+  color: #FF3B3F;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#todo-modal .modal-container form .success-message {
+  color: #4CAF50;
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+#todo-modal .modal-container form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+#todo-modal .modal-container form label span {
+  color: #FF3B3F;
+}
+
+/* Modal overlay */
+#todo-modal .modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+/* Modal animation */
+#todo-modal {
+  animation: fadeIn 0.5s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Mobile layout */
+@media only screen and (max-width: 768px) {
+  /* Adjust font sizes, margins, and padding for mobile */
+  body {
+    font-size: 14px;
+  }
+  .todo-list {
+    margin: 20px auto;
+  }
+  .todo-list li {
+    padding: 10px;
+  }
+  .main-container {
+    grid-template-columns: 1fr; /* stack the columns on mobile */
+    width: 100%; /* add this to make the main container full width */
+    padding: 20px; /* add this to add some padding to the main container */
+    height: 100vh; /* add this to make the main container full height */
+    overflow-y: auto; /* add this to add a scrollbar if necessary */
+  }
+  /* Make edit and delete buttons smaller in mobile mode */
+  .edit-button, .delete-button {
+    font-size: 8px;
+    padding: 2px 5px;
+  }
+  /* Add space between todo label and description */
+  .todo-label {
+    margin-bottom: 5px;
+  }
+}
+
+/* Add this to make the website layout more responsive in vertical mode */
+@media only screen and (max-width: 767px) and (orientation: portrait) {
+  .main-container {
+    width: 100%;
+    padding: 10px; /* reduce the padding in vertical mode */
+    grid-template-rows: 1fr;
+  }
+  .todo-list {
+    margin: 10px auto; /* reduce the margin in vertical mode */
+    grid-column: 1;
+    grid-row: 1;
+    height: 100%;
+    overflow-y: auto;
+  }
+  .todo-list li {
+    padding: 5px; /* reduce the padding in vertical mode */
+  }
+  /* Make edit and delete buttons even smaller in vertical mode */
+  .edit-button, .delete-button {
+    font-size: 6px;
+    padding: 1px 3px;
+  }
+  /* Add more space between todo label and description in vertical mode */
+  .todo-label {
+    font-size: 12px; /* make the label smaller in vertical mode */
+    margin-bottom: 20px; /* add more space between label and description */
+  }
+}
+
+/* Add this to make the website layout more expansive in horizontal mode */
+@media only screen and (max-width: 767px) and (orientation: landscape) {
+  .main-container {
+    width: 100%;
+    padding: 40px; /* increase the padding in horizontal mode */
+  }
+  .todo-list {
+    margin: 40px auto; /* increase the margin in horizontal mode */
+  }
+  .todo-list li {
+    padding: 20px; /* increase the padding in horizontal mode */
+  }
+  /* Make edit and delete buttons smaller and spaced apart more in horizontal mode */
+  .edit-button, .delete-button {
+    font-size: 10px;
+    padding: 5px 10px;
+    margin-left: 10px; /* add space between buttons */
+  }
+  /* Add space between edit and delete buttons and project label in horizontal mode */
+  .project-label {
+    margin-right: 40px; /* add more space between project label and buttons */
+  }
 }

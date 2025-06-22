@@ -1,10 +1,10 @@
-// app.js
 import Todo from './todo.js';
 import Project from './project.js';
 import storage from './storage.js';
 
 class App {
-  constructor() {
+  constructor(dom) {
+    this._dom = dom;
     this.projects = storage.loadProjects();
 
     // Fallback in case no projects are loaded
@@ -16,38 +16,88 @@ class App {
     this.currentProject = this.projects[0];
   }
 
+  get domInstance() {
+    return this._dom;
+  }
+
+  set domInstance(dom) {
+    this._dom = dom;
+  }
+
   createTodo(title, description, dueDate, priority) {
     if (!title || !description || !dueDate || !priority) {
       console.error('Invalid todo data');
       return;
     }
     const todo = new Todo(title, description, dueDate, priority);
-    this.currentProject.addTodo(todo);
+    if (this.currentProject) {
+      this.currentProject.addTodo(todo);
+    } else {
+      console.error('No current project selected');
+    }
     storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
   }
 
   deleteTodo(todo) {
-    if (!this.currentProject.todos.includes(todo)) {
+    if (!this.currentProject) {
+      console.error('No current project');
+      return;
+    }
+    const index = this.currentProject.todos.findIndex((t) => t.id === todo.id);
+    if (index === -1) {
       console.error('Todo not found in current project');
       return;
     }
-    this.currentProject.removeTodo(todo);
+    this.currentProject.todos.splice(index, 1); // Remove the todo from the array
     storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
   }
 
-  updateTodo(todo, title, description, dueDate, priority) {
-    const updatedTodo = new Todo(title, description, dueDate, priority);
-    this.currentProject.updateTodo(todo, updatedTodo);
-    storage.saveProjects(this.projects);
+  
+updateTodo(todo, title, description, dueDate, priority) {
+  if (!this.currentProject) {
+    console.error('No current project');
+    return;
   }
-
-  toggleTodoCompleted(todo) {
-    if (todo.completed) {
-      console.log('Todo is already completed');
+  if (this.currentProject.todos.length === 0) {
+    // If there are no todos, create a new one instead of updating
+    this.createTodo(title, description, dueDate, priority);
+    return;
+  }
+  const todoItem = this.currentProject.todos.find((item) => item.id === todo.id);
+  if (!todoItem) {
+    console.error('Todo not found in current project');
+    return;
+  }
+  todoItem.title = title;
+  todoItem.description = description;
+  todoItem.dueDate = dueDate;
+  todoItem.priority = priority;
+  storage.saveProjects(this.projects);
+  if (this.domInstance) {
+    this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+  }
+}
+  toggleTodoCompleted(todoId) {
+    if (!this.currentProject) {
+      console.error('No current project');
       return;
     }
-    todo.toggleCompleted();
+    const todo = this.currentProject.todos.find((todo) => todo.id === todoId);
+    if (!todo) {
+      console.error('Todo not found in current project');
+      return;
+    }
+    todo.completed = !todo.completed;
     storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
   }
 
   addProject(projectName) {
@@ -58,13 +108,18 @@ class App {
 
     const project = new Project(projectName);
     this.projects.push(project);
-    this.currentProject = project; // switch to the new project
     storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
   }
 
   switchProject(project) {
     this.currentProject = project;
     storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
   }
 
   deleteProject(project) {
@@ -73,6 +128,17 @@ class App {
       this.currentProject = this.projects.length > 0 ? this.projects[0] : null;
     }
     storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
+  }
+
+  updateProject(project, projectName) {
+    project.name = projectName;
+    storage.saveProjects(this.projects);
+    if (this.domInstance) {
+      this.domInstance.renderTodoList(); // Call renderTodoList to update the DOM
+    }
   }
 
   getProjects() {

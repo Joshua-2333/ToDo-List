@@ -15,7 +15,7 @@ const storage = {
         todos: project.todos.map((todo) => ({
           title: todo.title,
           description: todo.description,
-          dueDate: todo.dueDate,
+          dueDate: todo.dueDate.toISOString(), // convert Date to ISO string
           priority: todo.priority,
           notes: todo.notes,
           checklist: todo.checklist,
@@ -50,6 +50,7 @@ const storage = {
                 todo.priority,
                 todo.notes,
                 todo.checklist,
+                todo.completed, // add completed property
               );
             } else {
               console.error('Invalid due date:', todo.dueDate);
